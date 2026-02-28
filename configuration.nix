@@ -107,6 +107,7 @@
     gnomeExtensions.appindicator # Needed for Windscribe and background app icons
     git
     htop
+    tlrc
   ];
 
   # Some programs need SUID wrappers, can be configured further or are

@@ -21,6 +21,27 @@
     };    
   };
 
+  # --- CLI PACKAGES ---
+  home.packages = with pkgs; [
+    tlrc
+  ];
+
+  # --- SHELL CONFIGURATION ---
+  # let home manager manage bash so it can inject fzf integration
+  programs.bash = {
+    enable = true;
+    shellAliases = {
+      update = "sudo nixos-rebuild switch --flake ~/nixos-config#thinkpad-e470";
+      update-dry = "sudo nixos-rebuild dry-run --flake ~/nixos-config#thinkpad-e470";
+    };
+  };
+
+  # --- FZF INTEGRATION ---
+  programs.fzf = {
+    enable = true;
+    enableBashIntegration = true;
+  };
+
   # Let Home Manager install and manage itself
   programs.home-manager.enable = true;
 
