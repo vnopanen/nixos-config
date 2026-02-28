@@ -8,10 +8,15 @@
     
     # The official hardware profile repository
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
+
+    home-manager = {
+      url = "github:nix-community/home-manager/release-25.11";
+      inputs.nixpkgs.follows = "nixpkgs"; # Forces Home Manager to use your system's package versions
+    };
   };
 
   # The 'outputs' build your specific system
-  outputs = { self, nixpkgs, nixos-hardware, ... }@inputs: {
+  outputs = { self, nixpkgs, nixos-hardware, home-manager, ... }@inputs: {
     nixosConfigurations = {
       # thinkpad-e470 profile: sudo nixos-rebuild switch --flake .#thinkpad-e470
       thinkpad-e470 = nixpkgs.lib.nixosSystem {
@@ -30,6 +35,13 @@
           
           # 3. Include your personal setup
           ./configuration.nix
+
+          home-manager.nixosModules.home-manager
+          {
+            home-manager.useGlobalPkgs = true;
+            home-manager.useUserPackages = true;
+            home-manager.users.veke = import ./home.nix;
+          }
         ];
       };
     };
