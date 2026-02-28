@@ -4,7 +4,7 @@
   # The 'inputs' are where your software comes from
   inputs = {
     # Using the unstable branch for the absolute latest GNOME and app updates
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable"; 
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-25.11"; 
     
     # The official hardware profile repository
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";

@@ -99,7 +99,7 @@
   #  vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
   #  wget
     brave                           
-    #rustdesk 28.2. no cache yet
+    rustdesk
     python3Packages.python-kasa     
     
     # GNOME Tweaks is essential for customizing GNOME behavior on a ThinkPad
