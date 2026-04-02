@@ -3,20 +3,25 @@
 
   # The 'inputs' are where your software comes from
   inputs = {
-    # Using the unstable branch for the absolute latest GNOME and app updates
     nixpkgs.url = "github:nixos/nixpkgs/nixos-25.11"; 
-    
-    # The official hardware profile repository
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
 
     home-manager = {
       url = "github:nix-community/home-manager/release-25.11";
       inputs.nixpkgs.follows = "nixpkgs"; # Forces Home Manager to use your system's package versions
     };
+
+    cosmic-manager = {
+      url = "github:HeitorAugustoLN/cosmic-manager";
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+        home-manager.follows = "home-manager";
+      };
+    };
   };
 
   # The 'outputs' build your specific system
-  outputs = { self, nixpkgs, nixos-hardware, home-manager, ... }@inputs: {
+  outputs = { self, nixpkgs, nixos-hardware, home-manager, cosmic-manager, ... }@inputs: {
     nixosConfigurations = {
       # thinkpad-e470 profile: sudo nixos-rebuild switch --flake .#thinkpad-e470
       thinkpad-e470 = nixpkgs.lib.nixosSystem {
@@ -40,7 +45,13 @@
           {
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
-            home-manager.users.veke = import ./home.nix;
+            home-manager.users.veke = { 
+              imports = [
+                ./home.nix
+                cosmic-manager.homeManagerModules.cosmic-manager
+              ];
+            };
+            home-manager.extraSpecialArgs = { inherit cosmic-manager; };
           }
         ];
       };

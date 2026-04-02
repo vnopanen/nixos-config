@@ -1,30 +1,20 @@
-{ config, pkgs, ... }:
+{ config, pkgs, cosmic-manager, ... }:
 
 {
   # Basic user info
   home.username = "veke";
   home.homeDirectory = "/home/veke";
 
-  # --- GNOME SETTINGS ---
-  dconf.settings = {
-    # 1. Register the custom shortcut in the GNOME database
-    "org/gnome/settings-daemon/plugins/media-keys" = {
-      custom-keybindings = [
-        "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/"
-      ];
-    };
-    # 2. Define what the shortcut actually does
-    "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0" = {
-      binding = "<Primary><Alt>t";
-      command = "kgx"; # 'kgx' is the internal name for GNOME Console
-      name = "Open Terminal";
-    };    
-  };
-
   # --- CLI PACKAGES ---
   home.packages = with pkgs; [
     tlrc
   ];
+
+  imports = [
+    cosmic-manager.homeManagerModules.cosmic-manager
+  ];
+
+  wayland.desktopManager.cosmic.enable = true;
 
   # --- SHELL CONFIGURATION ---
   # let home manager manage bash so it can inject fzf integration

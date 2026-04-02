@@ -42,9 +42,9 @@
   # Enable the X11 windowing system.
   services.xserver.enable = true;
 
-  # Enable the GNOME Desktop Environment.
-  services.displayManager.gdm.enable = true;
-  services.desktopManager.gnome.enable = true;
+  # Enable cosmic Desktop Environment.
+  services.desktopManager.cosmic.enable = true;
+  services.displayManager.cosmic-greeter.enable = true;
 
   # Configure keymap in X11
   services.xserver.xkb = {
@@ -96,15 +96,9 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-  #  vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
-  #  wget
     brave                           
     rustdesk
     python3Packages.python-kasa     
-    
-    # GNOME Tweaks is essential for customizing GNOME behavior on a ThinkPad
-    gnome-tweaks 
-    gnomeExtensions.appindicator # Needed for Windscribe and background app icons
     git
     htop
     tlrc
