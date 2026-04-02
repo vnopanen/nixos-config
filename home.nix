@@ -21,7 +21,8 @@
   programs.bash = {
     enable = true;
     shellAliases = {
-      update = "sudo nixos-rebuild switch --flake ~/nixos-config#thinkpad-e470";
+      update-boot = "sudo nixos-rebuild boot --flake ~/nixos-config#thinkpad-e470";
+      update-switch = "sudo nixos-rebuild switch --flake ~/nixos-config#thinkpad-e470";
       update-dry = "sudo nixos-rebuild dry-run --flake ~/nixos-config#thinkpad-e470";
     };
   };
