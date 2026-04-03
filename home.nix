@@ -27,9 +27,9 @@
       update-dry = "sudo nixos-rebuild dry-run --flake ~/nixos-config#thinkpad-e470";
       g = "git status";
       lg = "lazygit";
-      .. = "cd ..";
-      ... = "cd ../..";
-      .... = "cd ../../..";
+      ".." = "cd ..";
+      "..." = "cd ../..";
+      "...." = "cd ../../..";
     };
   };
 
