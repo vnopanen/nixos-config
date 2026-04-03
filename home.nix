@@ -25,6 +25,11 @@
       update-boot = "sudo nixos-rebuild boot --flake ~/nixos-config#thinkpad-e470";
       update-switch = "sudo nixos-rebuild switch --flake ~/nixos-config#thinkpad-e470";
       update-dry = "sudo nixos-rebuild dry-run --flake ~/nixos-config#thinkpad-e470";
+      g = "git status";
+      lg = "lazygit";
+      .. = "cd ..";
+      ... = "cd ../..";
+      .... = "cd ../../..";
     };
   };
 
