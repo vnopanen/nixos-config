@@ -97,7 +97,6 @@
   # $ nix search wget
   environment.systemPackages = with pkgs; [
     brave                           
-    rustdesk
     python3Packages.python-kasa     
     git
     htop
