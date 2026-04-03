@@ -2,7 +2,7 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 
 {
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
@@ -41,6 +41,11 @@
 
   # Enable the X11 windowing system.
   services.xserver.enable = true;
+
+  # Disable nvidia drivers builds
+  #services.xserver.videoDrivers = lib.mkAfter (prev: lib.lists.unique (lib.filter (vd: vd != "nvidia") prev));
+  #disabledModules = [ "hardware/video/nvidia.nix" ];
+  services.xserver.videoDrivers = lib.mkForce [ "modesetting" ];
 
   # Enable cosmic Desktop Environment.
   services.desktopManager.cosmic.enable = true;
