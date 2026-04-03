@@ -41,22 +41,7 @@
 
   programs.starship = {
     enable = true;
-    settings = {
-      format = "$all$nix_shell$git_branch$git_commit$git_state$git_status$cmd_duration\n$username$hostname$directory";
-      character = {
-        success_symbol = "[➜](bold green) ";
-        error_symbol = "[✗](bold red) ";
-      };
-      cmd_duration = {
-        min_time = 2000;
-        format = "⏱ [$duration]($style) ";
-        style = "yellow bold";
-        show_milliseconds = false;
-        disabled = false;
-        show_notifications = false;
-        min_time_to_notify = 45000;
-      };
-    };
+    settings = pkgs.lib.importTOML ./starship.toml;
   };
 
   # Let Home Manager install and manage itself
