@@ -1,24 +1,16 @@
-{ config, pkgs, cosmic-manager, ... }:
+{
+  config,
+  pkgs,
+  ...
+}:
 
 {
-  # Basic user info
   home.username = "veke";
   home.homeDirectory = "/home/veke";
-
-  # --- CLI PACKAGES ---
   home.packages = with pkgs; [
-    tlrc
     starship
   ];
 
-  imports = [
-    cosmic-manager.homeManagerModules.cosmic-manager
-  ];
-
-  wayland.desktopManager.cosmic.enable = true;
-
-  # --- SHELL CONFIGURATION ---
-  # let home manager manage bash so it can inject fzf integration
   programs.bash = {
     enable = true;
     shellAliases = {
@@ -33,7 +25,6 @@
     };
   };
 
-  # --- FZF INTEGRATION ---
   programs.fzf = {
     enable = true;
     enableBashIntegration = true;
@@ -56,11 +47,13 @@
         select = "underline";
       };
     };
-    languages.language = [{
-      name = "nix";
-      auto-format = true;
-      formatter.command = "${pkgs.nixfmt}/bin/nixfmt";
-    }];
+    languages.language = [
+      {
+        name = "nix";
+        auto-format = true;
+        formatter.command = "${pkgs.nixfmt}/bin/nixfmt";
+      }
+    ];
     themes = {
       autumn_night_transparent = {
         "inherits" = "autumn_night";
@@ -69,7 +62,6 @@
     };
   };
 
-  # Let Home Manager install and manage itself
   programs.home-manager.enable = true;
 
   # Do not change this version number.
