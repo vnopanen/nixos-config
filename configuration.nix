@@ -38,6 +38,7 @@
   # Enable cosmic Desktop Environment.
   services.desktopManager.cosmic.enable = true;
   services.displayManager.cosmic-greeter.enable = true;
+  services.system76-scheduler.enable = true;
 
   # Configure keymap in X11
   services.xserver.xkb = {
