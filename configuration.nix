@@ -16,6 +16,7 @@
 
   networking.hostName = "thinkpad-e470";
   networking.networkmanager.enable = true;
+  hardware.bluetooth.powerOnBoot = false;
 
   time.timeZone = "Europe/Helsinki";
 
