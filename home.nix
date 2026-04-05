@@ -8,9 +8,6 @@
 {
   home.username = "veke";
   home.homeDirectory = "/home/veke";
-  home.packages = with pkgs; [
-    starship
-  ];
 
   programs.bash = {
     enable = true;
@@ -27,6 +24,11 @@
   };
 
   programs.fzf = {
+    enable = true;
+    enableBashIntegration = true;
+  };
+
+  programs.zoxide = {
     enable = true;
     enableBashIntegration = true;
   };
