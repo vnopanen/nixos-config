@@ -80,6 +80,7 @@
     htop
     tlrc
     ripgrep
+    tree
   ];
 
   services.openssh.enable = true;
