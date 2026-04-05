@@ -1,6 +1,7 @@
 {
   config,
   pkgs,
+  inputs,
   ...
 }:
 
@@ -60,6 +61,12 @@
         "ui.background" = { };
       };
     };
+  };
+
+  # cosmic-manager settings
+  wayland.desktopManager.cosmic = {
+    enable = true;
+    appearance.theme.mode = "dark";
   };
 
   programs.home-manager.enable = true;

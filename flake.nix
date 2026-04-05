@@ -43,13 +43,13 @@
             {
               home-manager.useGlobalPkgs = true;
               home-manager.useUserPackages = true;
+              home-manager.extraSpecialArgs = { inherit inputs; };
               home-manager.users.veke = {
                 imports = [
                   ./home.nix
                   cosmic-manager.homeManagerModules.cosmic-manager
                 ];
               };
-              home-manager.extraSpecialArgs = { inherit cosmic-manager; };
             } # home-manager
           ];
         };
