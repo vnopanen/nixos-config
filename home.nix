@@ -8,6 +8,14 @@
 {
   home.username = "veke";
   home.homeDirectory = "/home/veke";
+  home.sessionVariables = {
+    GEMINI_HOME = "$HOME/.local/state/gemini";
+    XDG_CONFIG_HOME = "$HOME/.config";
+  };
+  home.activation.setupGemini = config.lib.dag.entryAfter [ "writeBoundary" ] ''
+    mkdir -p $HOME/.local/state/gemini
+    mkdir -p $HOME/.config/gemini
+  '';
 
   programs.bash = {
     enable = true;
@@ -69,6 +77,11 @@
   wayland.desktopManager.cosmic = {
     enable = true;
     appearance.theme.mode = "dark";
+  };
+
+  programs.gemini-cli = {
+    enable = true;
+    package = inputs.nixpkgs-unstable.legacyPackages.${pkgs.system}.gemini-cli;
   };
 
   programs.home-manager.enable = true;

@@ -1,0 +1,7 @@
+keys:
+  - &thinkpad-e470 age1v6wrmcmef2je3dph8g04xpjw83c8qq9du249tg9xzw8pqywkl4aqcqs4wz
+creation_rules:
+  - path_regex: secrets/.*\.yaml$
+    key_groups:
+      - age:
+        - *thinkpad-e470
