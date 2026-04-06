@@ -1,10 +1,22 @@
 {
   description = "NixOS Flake Configuration";
 
+  nixConfig = {
+    extra-substituters = [
+      "https://nixos-raspberrypi.cachix.org"
+      "https://nix-community.cachix.org"
+    ];
+    extra-trusted-public-keys = [
+      "nixos-raspberrypi.cachix.org-1:4iMO9LXa8BqhU+Rpg6LQKiGa2lsNh/j2oiYLNOQ5sPI="
+      "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+    ];
+  };
+
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-25.11";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
+    nixos-raspberrypi.url = "github:nvmd/nixos-raspberrypi/main";
 
     home-manager = {
       url = "github:nix-community/home-manager/release-25.11";
@@ -18,42 +30,29 @@
         home-manager.follows = "home-manager";
       };
     };
+
+    agenix = {
+      url = "github:ryantm/agenix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
     {
       self,
       nixpkgs,
-      nixpkgs-unstable,
-      nixos-hardware,
-      home-manager,
-      cosmic-manager,
       ...
     }@inputs:
     {
       nixosConfigurations = {
         thinkpad-e470 = nixpkgs.lib.nixosSystem {
-          system = "x86_64-linux";
           specialArgs = { inherit inputs; };
+          modules = [ ./hosts/thinkpad-e470 ];
+        };
 
-          modules = [
-            ./configuration.nix
-            ./hardware-configuration.nix
-            nixos-hardware.nixosModules.lenovo-thinkpad-e470
-            nixos-hardware.nixosModules.common-gpu-nvidia-disable
-            home-manager.nixosModules.home-manager
-            {
-              home-manager.useGlobalPkgs = true;
-              home-manager.useUserPackages = true;
-              home-manager.extraSpecialArgs = { inherit inputs; };
-              home-manager.users.veke = {
-                imports = [
-                  ./home.nix
-                  cosmic-manager.homeManagerModules.cosmic-manager
-                ];
-              };
-            } # home-manager
-          ];
+        rpi-z2w = inputs.nixos-raspberrypi.lib.nixosSystem {
+          specialArgs = { inherit inputs; };
+          modules = [ ./hosts/rpi-z2w ];
         };
       };
     };
