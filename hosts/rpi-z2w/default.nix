@@ -25,6 +25,7 @@
   documentation.doc.enable = false;
   programs.command-not-found.enable = false;
   fonts.fontconfig.enable = false;
+  environment.defaultPackages = lib.mkForce [ ];
 
   # Minimal locale for RPi to save build time
   i18n.defaultLocale = "C.UTF-8";
