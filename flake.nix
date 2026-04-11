@@ -54,6 +54,19 @@
           specialArgs = { inherit inputs; };
           modules = [ ./hosts/rpi-z2w ];
         };
+
+        # Builds a flashable SD card image (.img.zst) that includes the full
+        # rpi-z2w configuration. Build with:
+        #   nix build .#nixosConfigurations.rpi-z2w-sdimage.config.system.build.sdImage
+        # Flash with:
+        #   zstdcat result/*.img.zst | sudo dd of=/dev/sdX bs=4M status=progress conv=fsync
+        rpi-z2w-sdimage = inputs.nixos-raspberrypi.lib.nixosSystem {
+          specialArgs = { inherit inputs; };
+          modules = [
+            ./hosts/rpi-z2w
+            inputs.nixos-raspberrypi.nixosModules.sd-image
+          ];
+        };
       };
     };
 }
