@@ -34,25 +34,50 @@
   i18n.extraLocaleSettings = lib.mkForce { };
 
   networking.hostName = "rpi-z2w";
-  networking.useDHCP = lib.mkForce false;
-  networking.interfaces.wlan0.useDHCP = false;
-  networking.interfaces.wlan0.ipv4.addresses = [
-    {
-      address = "STATIC_IP_PLACEHOLDER";
-      prefixLength = 24;
-    }
-  ];
-  networking.defaultGateway = "STATIC_GATEWAY_PLACEHOLDER";
-  networking.nameservers = [
-    "STATIC_DNS_PLACEHOLDER"
-    "1.1.1.1"
-  ];
+  networking.useDHCP = lib.mkDefault true;
+  networking.interfaces.wlan0.useDHCP = lib.mkDefault true;
 
   networking.wireless = {
     enable = true;
     secretsFile = config.age.secrets.wifi_rpi.path;
-    networks."@WIFI_SSID@" = {
-      psk = "@WIFI_PASSWORD@";
+    networks = {
+      "@WIFI_SSID@" = {
+        psk = "@WIFI_PASSWORD@";
+      };
+    };
+  };
+
+  services.udisks2.enable = false;
+  services.logrotate.enable = false;
+  systemd.services."systemd-udev-settle".enable = false;
+  services.timesyncd.enable = true;
+  services.chrony.enable = false;
+
+  services.journald.extraConfig = ''
+    Storage=volatile
+    RuntimeMaxUse=20M
+    MaxRetentionSec=1day
+  '';
+
+  nix.settings = {
+    # Prevent the Pi from trying to build anything locally
+    max-jobs = 0;
+    # Limit the number of connections/downloads
+    cores = 1;
+    # Disable automatic background disk space cleanup during a deploy
+    min-free = 128 * 1024 * 1024; # 128MB
+    # Don't waste time trying to fetch from the internet if the host is pushing
+    substituters = lib.mkForce [ ];
+  };
+
+  systemd.services.nix-daemon = {
+    serviceConfig = {
+      # Give the daemon a lower priority
+      Nice = lib.mkForce 19;
+      CPUSchedulingPolicy = lib.mkForce "idle";
+      # Prevent Nix from eating all the RAM
+      MemoryMax = "256M";
+      MemoryHigh = "200M";
     };
   };
 
