@@ -16,7 +16,14 @@
     inputs.agenix.nixosModules.default
   ];
 
-  age.secrets.kasa_hash.file = ../../secrets/kasa_hash.age;
+  age.secrets.kasa_hash = {
+    file = ../../secrets/kasa_hash.age;
+    owner = "veke";
+  };
+  age.secrets.kasa_host = {
+    file = ../../secrets/kasa_host.age;
+    owner = "veke";
+  };
   age.secrets.wifi_thinkpad.file = ../../secrets/wifi_thinkpad.age;
 
   nixpkgs.hostPlatform = "x86_64-linux";

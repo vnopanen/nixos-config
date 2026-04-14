@@ -31,7 +31,7 @@
     update-switch = "sudo nixos-rebuild switch --flake ~/nixos-config#thinkpad-e470";
     update-dry = "sudo nixos-rebuild dry-run --flake ~/nixos-config#thinkpad-e470";
     lg = "lazygit";
-    kasa = "kasa --credentials-hash $(cat ${osConfig.age.secrets.kasa_hash.path})";
+    kasa-plug = "kasa --credentials-hash $(cat ${osConfig.age.secrets.kasa_hash.path}) --encrypt-type KLAP --host $(cat ${osConfig.age.secrets.kasa_host.path})";
   };
 
   programs.fzf = {
