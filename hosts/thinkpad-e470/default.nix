@@ -80,6 +80,9 @@
     user = "veke";
   };
   services.system76-scheduler.enable = true;
+  services.thermald.enable = true;
+  services.power-profiles-daemon.enable = true;
+  services.tlp.enable = false;
 
   home-manager = {
     useGlobalPkgs = true;
