@@ -36,16 +36,20 @@
   networking.hostName = "rpi-z2w";
   networking.useDHCP = lib.mkDefault true;
   networking.interfaces.wlan0.useDHCP = lib.mkDefault true;
+  networking.enableIPv6 = false;
 
-  networking.wireless = {
-    enable = true;
-    secretsFile = config.age.secrets.wifi_rpi.path;
-    networks = {
-      "@WIFI_SSID@" = {
-        psk = "@WIFI_PASSWORD@";
-      };
-    };
-  };
+  networking.wireless.iwd.enable = true;
+
+  systemd.services.iwd.preStart = ''
+        mkdir -p /var/lib/iwd
+        # Assuming the agenix secret is in a format like: WIFI_SSID="..." and WIFI_PASSWORD="..."
+        source ${config.age.secrets.wifi_rpi.path}
+        cat > "/var/lib/iwd/$WIFI_SSID.psk" <<EOF
+    [Security]
+    Passphrase=$WIFI_PASSWORD
+    EOF
+        chmod 600 "/var/lib/iwd/$WIFI_SSID.psk"
+  '';
 
   services.udisks2.enable = false;
   services.logrotate.enable = false;

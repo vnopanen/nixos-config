@@ -52,7 +52,11 @@
     "quiet"
     "mitigations=off"
     "usb-storage.quirks=04e8:4001:u"
+    "ipv6.disable=1"
   ];
+  boot.extraModprobeConfig = ''
+    options brcmfmac roamoff=1
+  '';
   boot.kernel.sysctl = {
     "vm.swappiness" = 150;
     "vm.vfs_cache_pressure" = 500;
