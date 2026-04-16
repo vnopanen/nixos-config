@@ -11,9 +11,19 @@
   boot.loader.raspberry-pi.bootloader = "kernel";
 
   # SD card partitions
+  fileSystems."/boot/firmware" = {
+    device = "/dev/disk/by-label/FIRMWARE";
+    fsType = "vfat";
+    options = [ "noatime" ];
+  };
+
   fileSystems."/" = {
     device = "/dev/disk/by-label/NIXOS_SD";
     fsType = "ext4";
+    options = [
+      "noatime"
+      "commit=300"
+    ];
   };
 
   # SSD mount
@@ -22,12 +32,7 @@
     fsType = "ext4";
     options = [
       "noatime"
-      "lazytime"
-      "rw"
       "nofail"
-      "noauto"
-      "x-systemd.automount"
-      "commit=600"
     ];
   };
 
