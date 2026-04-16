@@ -44,6 +44,14 @@
       nixos-raspberrypi,
       ...
     }@inputs:
+    let
+      mkRpiSdImage =
+        modules:
+        (nixos-raspberrypi.lib.nixosSystem {
+          specialArgs = { inherit inputs; };
+          modules = modules ++ [ nixos-raspberrypi.nixosModules.sd-image ];
+        }).config.system.build.sdImage;
+    in
     {
       nixosConfigurations = {
         thinkpad-e470 = nixpkgs.lib.nixosSystem {
@@ -53,15 +61,12 @@
 
         rpi-z2w = nixos-raspberrypi.lib.nixosSystem {
           specialArgs = { inherit inputs; };
-          modules = [
-            ./hosts/rpi-z2w
-            nixos-raspberrypi.nixosModules.sd-image
-          ];
+          modules = [ ./hosts/rpi-z2w ];
         };
       };
 
       packages.aarch64-linux = {
-        rpi-z2w = self.nixosConfigurations.rpi-z2w.config.system.build.sdImage;
+        rpi-z2w = mkRpiSdImage [ ./hosts/rpi-z2w ];
       };
     };
 }
