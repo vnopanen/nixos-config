@@ -1,6 +1,4 @@
 {
-  config,
-  osConfig,
   pkgs,
   inputs,
   ...
@@ -11,6 +9,7 @@
     tree
     nano
     ripgrep
+    gitMinimal
   ];
 
   programs.bash = {

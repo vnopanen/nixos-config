@@ -1,5 +1,4 @@
 {
-  config,
   osConfig,
   pkgs,
   inputs,
@@ -9,13 +8,10 @@
 {
   imports = [ inputs.cosmic-manager.homeManagerModules.cosmic-manager ];
 
-  # cosmic-manager settings
-  wayland.desktopManager.cosmic = {
-    enable = true;
-    appearance.theme.mode = "dark";
-  };
-
   home.packages = with pkgs; [
+    tree
+    nano
+    ripgrep
     brave
     python3Packages.python-kasa
     tlrc
@@ -26,12 +22,24 @@
     git
   ];
 
-  programs.bash.shellAliases = {
-    update-boot = "sudo nixos-rebuild boot --flake ~/nixos-config#thinkpad-e470";
-    update-switch = "sudo nixos-rebuild switch --flake ~/nixos-config#thinkpad-e470";
-    update-dry = "sudo nixos-rebuild dry-run --flake ~/nixos-config#thinkpad-e470";
-    lg = "lazygit";
-    kasa-plug = "kasa --credentials-hash $(cat ${osConfig.age.secrets.kasa_hash.path}) --encrypt-type KLAP --host $(cat ${osConfig.age.secrets.kasa_host.path})";
+  programs.bash = {
+    enable = true;
+    shellAliases = {
+      g = "git status";
+      ".." = "cd ..";
+      "..." = "cd ../..";
+      "...." = "cd ../../..";
+      update-boot = "sudo nixos-rebuild boot --flake ~/nixos-config#thinkpad-e470";
+      update-switch = "sudo nixos-rebuild switch --flake ~/nixos-config#thinkpad-e470";
+      update-dry = "sudo nixos-rebuild dry-run --flake ~/nixos-config#thinkpad-e470";
+      lg = "lazygit";
+      kasa-plug = "kasa --credentials-hash $(cat ${osConfig.age.secrets.kasa_hash.path}) --encrypt-type KLAP --host $(cat ${osConfig.age.secrets.kasa_host.path})";
+    };
+  };
+
+  programs.starship = {
+    enable = true;
+    settings = pkgs.lib.importTOML (inputs.self + /starship.toml);
   };
 
   programs.fzf = {
@@ -63,7 +71,7 @@
     ];
     themes = {
       autumn_night_transparent = {
-        "inherits" = "autumn_night";
+        inherits = "autumn_night";
         "ui.background" = { };
       };
     };
@@ -87,4 +95,14 @@
       };
     };
   };
+
+  wayland.desktopManager.cosmic = {
+    enable = true;
+    appearance.theme.mode = "dark";
+  };
+
+  programs.home-manager.enable = true;
+  manual.manpages.enable = false;
+  manual.html.enable = false;
+  home.stateVersion = "25.11";
 }

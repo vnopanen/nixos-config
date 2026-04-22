@@ -3,46 +3,67 @@
   lib,
   pkgs,
   inputs,
+  username,
   ...
 }:
 
 {
   imports = [
     ./hardware-configuration.nix
-    ../../modules/default.nix
-    inputs.nixos-raspberrypi.nixosModules.raspberry-pi-02.base
+    ../modules/user.nix
     inputs.home-manager.nixosModules.home-manager
+    inputs.nixos-raspberrypi.nixosModules.raspberry-pi-02.base
     inputs.agenix.nixosModules.default
   ];
-
-  age.secrets.wifi_rpi.file = ../../secrets/wifi_rpi.age;
-
-  # Headless optimizations
-  documentation.enable = false;
-  documentation.nixos.enable = false;
-  documentation.man.enable = false;
-  documentation.info.enable = false;
-  documentation.doc.enable = false;
-  programs.command-not-found.enable = false;
-  fonts.fontconfig.enable = false;
-  environment.defaultPackages = lib.mkForce [ ];
-
-  # Minimal locale for RPi to save build time
-  i18n.defaultLocale = "C.UTF-8";
-  i18n.supportedLocales = [ "C.UTF-8/UTF-8" ];
-  i18n.glibcLocales = pkgs.glibc;
-  i18n.extraLocaleSettings = lib.mkForce { };
 
   networking.hostName = "rpi-z2w";
   networking.useDHCP = lib.mkDefault true;
   networking.interfaces.wlan0.useDHCP = lib.mkDefault true;
   networking.enableIPv6 = false;
-
   networking.wireless.iwd.enable = true;
+
+  time.timeZone = "Europe/Helsinki";
+  console.keyMap = "fi";
+
+  i18n.defaultLocale = "C.UTF-8";
+  i18n.supportedLocales = [ "C.UTF-8/UTF-8" ];
+  i18n.glibcLocales = pkgs.glibc;
+  i18n.extraLocaleSettings = lib.mkForce { };
+
+  nixpkgs.config.allowUnfree = true;
+
+  nix.settings = {
+    experimental-features = [
+      "nix-command"
+      "flakes"
+    ];
+    max-jobs = 0;
+    cores = 1;
+    min-free = 128 * 1024 * 1024;
+    substituters = lib.mkForce [ ];
+  };
+
+  systemd.services.nix-daemon.serviceConfig = {
+    Nice = lib.mkForce 19;
+    CPUSchedulingPolicy = lib.mkForce "idle";
+    MemoryMax = "256M";
+    MemoryHigh = "200M";
+  };
+
+  age.secrets.wifi_rpi.file = ../secrets/wifi_rpi.age;
+
+  documentation.enable = false;
+  documentation.nixos.enable = false;
+  documentation.man.enable = false;
+  documentation.info.enable = false;
+  documentation.doc.enable = false;
+
+  fonts.fontconfig.enable = false;
+  programs.command-not-found.enable = false;
+  environment.defaultPackages = lib.mkForce [ ];
 
   systemd.services.iwd.preStart = ''
         mkdir -p /var/lib/iwd
-        # Assuming the agenix secret is in a format like: WIFI_SSID="..." and WIFI_PASSWORD="..."
         source ${config.age.secrets.wifi_rpi.path}
         cat > "/var/lib/iwd/$WIFI_SSID.psk" <<EOF
     [Security]
@@ -51,6 +72,8 @@
         chmod 600 "/var/lib/iwd/$WIFI_SSID.psk"
   '';
 
+  services.openssh.enable = true;
+  services.tailscale.enable = true;
   services.udisks2.enable = false;
   services.logrotate.enable = false;
   systemd.services."systemd-udev-settle".enable = false;
@@ -62,28 +85,6 @@
     RuntimeMaxUse=20M
     MaxRetentionSec=1day
   '';
-
-  nix.settings = {
-    # Prevent the Pi from trying to build anything locally
-    max-jobs = 0;
-    # Limit the number of connections/downloads
-    cores = 1;
-    # Disable automatic background disk space cleanup during a deploy
-    min-free = 128 * 1024 * 1024; # 128MB
-    # Don't waste time trying to fetch from the internet if the host is pushing
-    substituters = lib.mkForce [ ];
-  };
-
-  systemd.services.nix-daemon = {
-    serviceConfig = {
-      # Give the daemon a lower priority
-      Nice = lib.mkForce 19;
-      CPUSchedulingPolicy = lib.mkForce "idle";
-      # Prevent Nix from eating all the RAM
-      MemoryMax = "256M";
-      MemoryHigh = "200M";
-    };
-  };
 
   services.pihole-ftl = {
     enable = true;
@@ -119,13 +120,13 @@
         "map to guest" = "bad user";
       };
       "Shared" = {
-        "path" = "/mnt/ssd/shared";
-        "browseable" = "yes";
+        path = "/mnt/ssd/shared";
+        browseable = "yes";
         "read only" = "no";
         "guest ok" = "no";
         "create mask" = "0644";
         "directory mask" = "0755";
-        "force user" = "veke";
+        "force user" = username;
         "force group" = "users";
       };
     };
@@ -135,13 +136,12 @@
     useGlobalPkgs = true;
     useUserPackages = true;
     extraSpecialArgs = { inherit inputs; };
-    users.veke = {
-      imports = [
-        ../../home/veke/default.nix
-        ../../home/veke/rpi-z2w.nix
-      ];
-      home.username = "veke";
-      home.homeDirectory = "/home/veke";
+    users.${username} = {
+      imports = [ ./home.nix ];
+      home.username = username;
+      home.homeDirectory = "/home/${username}";
     };
   };
+
+  system.stateVersion = "25.11";
 }
