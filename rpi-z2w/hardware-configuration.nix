@@ -1,16 +1,11 @@
 {
-  config,
   lib,
-  pkgs,
-  inputs,
   ...
 }:
 
 {
-  # Bootloader configuration
   boot.loader.raspberry-pi.bootloader = "kernel";
 
-  # SD card partitions
   fileSystems."/boot/firmware" = {
     device = "/dev/disk/by-label/FIRMWARE";
     fsType = "vfat";
@@ -26,7 +21,6 @@
     ];
   };
 
-  # SSD mount
   fileSystems."/mnt/ssd" = {
     device = "/dev/disk/by-uuid/01f3984e-f60c-444b-95e3-b1fdc6c4a357";
     fsType = "ext4";
@@ -36,7 +30,6 @@
     ];
   };
 
-  # Optimizations
   hardware.bluetooth.enable = false;
   boot.blacklistedKernelModules = [
     "snd_bcm2835"
