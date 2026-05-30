@@ -72,6 +72,18 @@
         chmod 600 "/var/lib/iwd/$WIFI_SSID.psk"
   '';
 
+  system.activationScripts.importSSHKey = {
+    text = ''
+      if [ ! -f /etc/ssh/ssh_host_ed25519_key ]; then
+        if [ -f /boot/ssh_host_ed25519_key ]; then
+          mkdir -p /etc/ssh
+          cp /boot/ssh_host_ed25519_key /etc/ssh/ssh_host_ed25519_key
+          chmod 600 /etc/ssh/ssh_host_ed25519_key
+        fi
+      fi
+    '';
+  };
+
   services.openssh.enable = true;
   services.tailscale.enable = true;
   services.udisks2.enable = false;
