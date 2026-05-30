@@ -154,6 +154,8 @@
   services.power-profiles-daemon.enable = true;
   services.tlp.enable = false;
 
+  virtualisation.podman.enable = true;
+
   home-manager = {
     useGlobalPkgs = true;
     useUserPackages = true;
