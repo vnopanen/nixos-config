@@ -120,6 +120,12 @@
   boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
+  boot.blacklistedKernelModules = [
+    "nouveau"
+    "nvidia"
+    "nvidia_modeset"
+    "nvidia_drm"
+  ];
 
   hardware.bluetooth.powerOnBoot = false;
 
