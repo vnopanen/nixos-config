@@ -12,7 +12,6 @@
     tree
     nano
     ripgrep
-    brave
     python3Packages.python-kasa
     tlrc
     gdu
@@ -21,6 +20,13 @@
     lazygit
     git
   ];
+
+  programs.brave = {
+    enable = true;
+    commandLineArgs = [
+      "--password-store=basic"
+    ];
+  };
 
   programs.bash = {
     enable = true;
