@@ -1,5 +1,6 @@
 {
   config,
+  pkgs,
   lib,
   inputs,
   username,
@@ -160,6 +161,11 @@
   services.thermald.enable = true;
   services.power-profiles-daemon.enable = true;
   services.tlp.enable = false;
+
+  services.udev.extraRules = ''
+    SUBSYSTEM=="power_supply", KERNEL=="AC", ATTR{online}=="1", RUN+="${pkgs.power-profiles-daemon}/bin/powerprofilesctl set performance"
+    SUBSYSTEM=="power_supply", KERNEL=="AC", ATTR{online}=="0", RUN+="${pkgs.power-profiles-daemon}/bin/powerprofilesctl set balanced"
+  '';
 
   virtualisation.podman.enable = true;
 
