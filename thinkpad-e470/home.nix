@@ -19,6 +19,8 @@
     zoxide
     lazygit
     git
+    screen
+    bmaptool
   ];
 
   programs.brave = {
@@ -101,6 +103,11 @@
       };
     };
   };
+
+  home.file.".screenrc".text = ''
+    defscrollback 5000
+    termcapinfo xterm* ti@:te@
+  '';
 
   wayland.desktopManager.cosmic = {
     enable = true;

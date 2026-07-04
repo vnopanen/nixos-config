@@ -19,7 +19,10 @@ in
   users.users.${username} = {
     isNormalUser = true;
     description = username;
-    extraGroups = [ "wheel" ];
+    extraGroups = [
+      "wheel"
+      "dialout"
+    ];
     shell = pkgs.bash;
   };
 
