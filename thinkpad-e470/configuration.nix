@@ -133,6 +133,7 @@
   services.openssh.enable = true;
   services.tailscale.enable = true;
   services.printing.enable = true;
+  services.flatpak.enable = true;
 
   services.xserver.videoDrivers = lib.mkForce [ "modesetting" ];
   services.xserver.xkb = {
@@ -172,6 +173,7 @@
   home-manager = {
     useGlobalPkgs = true;
     useUserPackages = true;
+    backupFileExtension = "backup";
     extraSpecialArgs = { inherit inputs; };
     users.${username} = {
       imports = [ ./home.nix ];
