@@ -5,6 +5,13 @@
   ...
 }:
 
+let
+  # Create an unstable pkgs instance that explicitly allows unfree packages
+  pkgs-unstable = import inputs.nixpkgs-unstable {
+    system = pkgs.stdenv.hostPlatform.system;
+    config.allowUnfree = true;
+  };
+in
 {
   imports = [ inputs.cosmic-manager.homeManagerModules.cosmic-manager ];
 
@@ -85,9 +92,9 @@
     };
   };
 
-  programs.gemini-cli = {
+  programs.antigravity-cli = {
     enable = true;
-    package = inputs.nixpkgs-unstable.legacyPackages.${pkgs.stdenv.hostPlatform.system}.gemini-cli;
+    package = pkgs-unstable.antigravity-cli;
     defaultModel = "gemini-3-flash-preview";
     settings = {
       security.auth.selectedType = "oauth-personal";
