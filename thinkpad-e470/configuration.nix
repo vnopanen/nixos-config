@@ -174,6 +174,7 @@
     useGlobalPkgs = true;
     useUserPackages = true;
     backupFileExtension = "backup";
+    overwriteBackup = true;
     extraSpecialArgs = { inherit inputs; };
     users.${username} = {
       imports = [ ./home.nix ];
