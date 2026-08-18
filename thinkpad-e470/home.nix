@@ -28,6 +28,7 @@ in
     git
     screen
     bmaptool
+    openssl
   ];
 
   programs.brave = {
@@ -75,6 +76,9 @@ in
         normal = "block";
         insert = "bar";
         select = "underline";
+      };
+      editor.soft-wrap = {
+        enable = true;
       };
     };
     languages.language = [
