@@ -29,6 +29,8 @@ in
     screen
     bmaptool
     openssl
+    uv
+    just
   ];
 
   programs.brave = {
