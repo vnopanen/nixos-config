@@ -168,6 +168,8 @@
     SUBSYSTEM=="power_supply", KERNEL=="AC", ATTR{online}=="0", RUN+="${pkgs.power-profiles-daemon}/bin/powerprofilesctl set balanced"
   '';
 
+  environment.localBinInPath = true;
+
   virtualisation.podman.enable = true;
 
   home-manager = {
