@@ -55,7 +55,7 @@
     shell = pkgs.bash;
   };
 
-  age.identityPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
+  age.identityPaths = [ "/etc/age/identity.txt" ];
 
   systemd.services.nix-daemon.serviceConfig = {
     Nice = lib.mkForce 19;
