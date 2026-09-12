@@ -3,14 +3,12 @@
   pkgs,
   lib,
   inputs,
-  username,
   ...
 }:
 
 {
   imports = [
     ./hardware-configuration.nix
-    ../modules/user.nix
     inputs.home-manager.nixosModules.home-manager
     inputs.nixos-hardware.nixosModules.lenovo-thinkpad-e470
     inputs.nixos-hardware.nixosModules.common-gpu-nvidia-disable
@@ -100,23 +98,36 @@
       "flakes"
     ];
     extra-platforms = [ "aarch64-linux" ];
+    trusted-users = [
+      "root"
+      "veke"
+    ];
+  };
+
+  age.identityPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
+
+  users.users.veke = {
+    isNormalUser = true;
+    description = "veke";
+    extraGroups = [
+      "wheel"
+      "dialout"
+      "networkmanager"
+      "video"
+      "audio"
+    ];
+    shell = pkgs.bash;
   };
 
   age.secrets.kasa_hash = {
     file = ../secrets/kasa_hash.age;
-    owner = username;
+    owner = "veke";
   };
   age.secrets.kasa_host = {
     file = ../secrets/kasa_host.age;
-    owner = username;
+    owner = "veke";
   };
   age.secrets.wifi_thinkpad.file = ../secrets/wifi_thinkpad.age;
-
-  users.users.${username}.extraGroups = [
-    "networkmanager"
-    "video"
-    "audio"
-  ];
 
   boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
   boot.loader.systemd-boot.enable = true;
@@ -146,7 +157,7 @@
   services.gnome.gnome-keyring.enable = false;
   services.displayManager.autoLogin = {
     enable = true;
-    user = username;
+    user = "veke";
   };
 
   services.pulseaudio.enable = false;
@@ -178,10 +189,10 @@
     backupFileExtension = "backup";
     overwriteBackup = true;
     extraSpecialArgs = { inherit inputs; };
-    users.${username} = {
+    users.veke = {
       imports = [ ./home.nix ];
-      home.username = username;
-      home.homeDirectory = "/home/${username}";
+      home.username = "veke";
+      home.homeDirectory = "/home/veke";
     };
   };
 

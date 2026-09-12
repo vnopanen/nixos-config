@@ -3,14 +3,12 @@
   lib,
   pkgs,
   inputs,
-  username,
   ...
 }:
 
 {
   imports = [
     ./hardware-configuration.nix
-    ../modules/user.nix
     inputs.home-manager.nixosModules.home-manager
     inputs.nixos-raspberrypi.nixosModules.raspberry-pi-02.base
     inputs.agenix.nixosModules.default
@@ -41,7 +39,23 @@
     cores = 1;
     min-free = 128 * 1024 * 1024;
     substituters = lib.mkForce [ ];
+    trusted-users = [
+      "root"
+      "veke"
+    ];
   };
+
+  users.users.veke = {
+    isNormalUser = true;
+    description = "veke";
+    extraGroups = [
+      "wheel"
+      "dialout"
+    ];
+    shell = pkgs.bash;
+  };
+
+  age.identityPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
 
   systemd.services.nix-daemon.serviceConfig = {
     Nice = lib.mkForce 19;
@@ -138,7 +152,7 @@
         "guest ok" = "no";
         "create mask" = "0644";
         "directory mask" = "0755";
-        "force user" = username;
+        "force user" = "veke";
         "force group" = "users";
       };
     };
@@ -148,10 +162,10 @@
     useGlobalPkgs = true;
     useUserPackages = true;
     extraSpecialArgs = { inherit inputs; };
-    users.${username} = {
+    users.veke = {
       imports = [ ./home.nix ];
-      home.username = username;
-      home.homeDirectory = "/home/${username}";
+      home.username = "veke";
+      home.homeDirectory = "/home/veke";
     };
   };
 
