@@ -9,53 +9,28 @@
 {
   imports = [
     ./hardware-configuration.nix
+    ../../modules/nixos/common.nix
     inputs.home-manager.nixosModules.home-manager
     inputs.nixos-raspberrypi.nixosModules.raspberry-pi-02.base
     inputs.agenix.nixosModules.default
   ];
 
-  networking.hostName = "rpi-z2w";
+  networking.hostName = "raspberry-pi-02";
   networking.useDHCP = lib.mkDefault true;
   networking.interfaces.wlan0.useDHCP = lib.mkDefault true;
   networking.enableIPv6 = false;
   networking.wireless.iwd.enable = true;
-
-  time.timeZone = "Europe/Helsinki";
-  console.keyMap = "fi";
 
   i18n.defaultLocale = "C.UTF-8";
   i18n.supportedLocales = [ "C.UTF-8/UTF-8" ];
   i18n.glibcLocales = pkgs.glibc;
   i18n.extraLocaleSettings = lib.mkForce { };
 
-  nixpkgs.config.allowUnfree = true;
-
   nix.settings = {
-    experimental-features = [
-      "nix-command"
-      "flakes"
-    ];
     max-jobs = 0;
     cores = 1;
     min-free = 128 * 1024 * 1024;
-    substituters = lib.mkForce [ ];
-    trusted-users = [
-      "root"
-      "veke"
-    ];
   };
-
-  users.users.veke = {
-    isNormalUser = true;
-    description = "veke";
-    extraGroups = [
-      "wheel"
-      "dialout"
-    ];
-    shell = pkgs.bash;
-  };
-
-  age.identityPaths = [ "/etc/age/identity.txt" ];
 
   systemd.services.nix-daemon.serviceConfig = {
     Nice = lib.mkForce 19;
@@ -64,7 +39,7 @@
     MemoryHigh = "200M";
   };
 
-  age.secrets.wifi_rpi.file = ../secrets/wifi_rpi.age;
+  age.secrets.wifi_rpi.file = ../../secrets/wifi_rpi.age;
 
   documentation.enable = false;
   documentation.nixos.enable = false;

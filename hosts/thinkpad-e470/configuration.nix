@@ -9,6 +9,7 @@
 {
   imports = [
     ./hardware-configuration.nix
+    ../../modules/nixos/common.nix
     inputs.home-manager.nixosModules.home-manager
     inputs.nixos-hardware.nixosModules.lenovo-thinkpad-e470
     inputs.nixos-hardware.nixosModules.common-gpu-nvidia-disable
@@ -43,6 +44,7 @@
         ];
       }
     ];
+    settings.extra-platforms = [ "aarch64-linux" ];
   };
 
   networking.hostName = "thinkpad-e470";
@@ -69,9 +71,6 @@
     };
   };
 
-  time.timeZone = "Europe/Helsinki";
-  console.keyMap = "fi";
-
   i18n.defaultLocale = "en_US.UTF-8";
   i18n.supportedLocales = [
     "en_US.UTF-8/UTF-8"
@@ -90,44 +89,22 @@
   };
 
   nixpkgs.hostPlatform = "x86_64-linux";
-  nixpkgs.config.allowUnfree = true;
 
-  nix.settings = {
-    experimental-features = [
-      "nix-command"
-      "flakes"
-    ];
-    extra-platforms = [ "aarch64-linux" ];
-    trusted-users = [
-      "root"
-      "veke"
-    ];
-  };
-
-  age.identityPaths = [ "/etc/age/identity.txt" ];
-
-  users.users.veke = {
-    isNormalUser = true;
-    description = "veke";
-    extraGroups = [
-      "wheel"
-      "dialout"
-      "networkmanager"
-      "video"
-      "audio"
-    ];
-    shell = pkgs.bash;
-  };
+  users.users.veke.extraGroups = [
+    "networkmanager"
+    "video"
+    "audio"
+  ];
 
   age.secrets.kasa_hash = {
-    file = ../secrets/kasa_hash.age;
+    file = ../../secrets/kasa_hash.age;
     owner = "veke";
   };
   age.secrets.kasa_host = {
-    file = ../secrets/kasa_host.age;
+    file = ../../secrets/kasa_host.age;
     owner = "veke";
   };
-  age.secrets.wifi_thinkpad.file = ../secrets/wifi_thinkpad.age;
+  age.secrets.wifi_thinkpad.file = ../../secrets/wifi_thinkpad.age;
 
   boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
   boot.loader.systemd-boot.enable = true;

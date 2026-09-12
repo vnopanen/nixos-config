@@ -58,17 +58,17 @@
       nixosConfigurations = {
         thinkpad-e470 = nixpkgs.lib.nixosSystem {
           specialArgs = { inherit inputs; };
-          modules = [ ./thinkpad-e470/configuration.nix ];
+          modules = [ ./hosts/thinkpad-e470/configuration.nix ];
         };
 
-        rpi-z2w = nixos-raspberrypi.lib.nixosSystem {
+        raspberry-pi-02 = nixos-raspberrypi.lib.nixosSystem {
           specialArgs = { inherit inputs; };
-          modules = [ ./rpi-z2w/configuration.nix ];
+          modules = [ ./hosts/raspberry-pi-02/configuration.nix ];
         };
       };
 
       packages.aarch64-linux = {
-        rpi-z2w = mkRpiSdImage [ ./rpi-z2w/configuration.nix ];
+        raspberry-pi-02 = mkRpiSdImage [ ./hosts/raspberry-pi-02/configuration.nix ];
       };
     };
 }

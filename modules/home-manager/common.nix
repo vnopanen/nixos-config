@@ -9,8 +9,17 @@
     tree
     nano
     ripgrep
-    gitMinimal
   ];
+
+  programs.fzf = {
+    enable = true;
+    enableBashIntegration = true;
+  };
+
+  programs.zoxide = {
+    enable = true;
+    enableBashIntegration = true;
+  };
 
   programs.bash = {
     enable = true;
@@ -28,7 +37,5 @@
   };
 
   programs.home-manager.enable = true;
-  manual.manpages.enable = false;
-  manual.html.enable = false;
   home.stateVersion = "25.11";
 }
