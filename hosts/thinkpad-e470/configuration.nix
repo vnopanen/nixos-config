@@ -30,6 +30,12 @@
     };
   };
 
+  programs.hyprland.enable = true;
+
+  environment.systemPackages = [
+    pkgs.kitty # required for the default Hyprland config
+  ];
+
   nix = {
     distributedBuilds = true;
     buildMachines = [

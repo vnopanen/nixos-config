@@ -9,6 +9,7 @@
     ../../modules/home-manager/common.nix
     ../../modules/home-manager/cosmic.nix
     ../../modules/home-manager/helix.nix
+    ../../modules/home-manager/hyprland.nix
     ../../modules/home-manager/antigravity-cli.nix
   ];
 
