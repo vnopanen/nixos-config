@@ -130,11 +130,33 @@
   };
 
   services.desktopManager.cosmic.enable = true;
-  services.displayManager.cosmic-greeter.enable = true;
   services.gnome.gnome-keyring.enable = false;
   services.displayManager.autoLogin = {
     enable = true;
     user = "veke";
+  };
+
+  services.greetd = {
+    enable = true;
+    settings = {
+      default_session = {
+        user = "greeter";
+        command = ''
+          ${inputs.nixpkgs-unstable.legacyPackages.x86_64-linux.tuigreet}/bin/tuigreet \
+            --time --remember --remember-session --background matrix \
+            --session-wrapper /etc/greetd/session-wrapper
+        '';
+      };
+    };
+  };
+
+  environment.etc."greetd/session-wrapper" = {
+    text = ''
+      #!/usr/bin/env bash
+      export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/ssh-agent"
+      exec "$@"
+    '';
+    mode = "0755";
   };
 
   services.pulseaudio.enable = false;
