@@ -165,6 +165,26 @@
       main = {
         terminal = "${pkgs.alacritty}/bin/alacritty";
         layer = "overlay";
+        font = "JetBrainsMono Nerd Font:size=13";
+        width = 40;
+        lines = 10;
+        horizontal-pad = 20;
+        vertical-pad = 15;
+        inner-pad = 10;
+      };
+
+      colors = {
+        background = "1a1b26ff"; # Dark Tokyo Night background
+        text = "c0caf5ff"; # Bright foreground text
+        match = "7aa2f7ff"; # Highlighted/matched characters
+        selection = "283457ff"; # Selected item background
+        selection-text = "c0caf5ff"; # Selected item text
+        border = "7aa2f7ff"; # Border accent color
+      };
+
+      border = {
+        width = 2;
+        radius = 8;
       };
     };
   };
