@@ -14,6 +14,7 @@
     inputs.nixos-hardware.nixosModules.lenovo-thinkpad-e470
     inputs.nixos-hardware.nixosModules.common-gpu-nvidia-disable
     inputs.agenix.nixosModules.default
+    inputs.niri.nixosModules.niri
   ];
 
   programs.ssh.extraConfig = ''
@@ -28,6 +29,11 @@
       hostNames = [ "eu.nixbuild.net" ];
       publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPIQCZc54poJ8vqawd8TraNryQeJnvH1eLpIDgbiqymM";
     };
+  };
+
+  programs.niri = {
+    enable = true;
+    package = pkgs.niri;
   };
 
   nix = {
@@ -130,7 +136,7 @@
   };
 
   services.desktopManager.cosmic.enable = true;
-  services.gnome.gnome-keyring.enable = false;
+  services.gnome.gnome-keyring.enable = lib.mkForce false;
   services.displayManager.autoLogin = {
     enable = true;
     user = "veke";
