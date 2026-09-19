@@ -11,6 +11,7 @@
     ../../modules/home-manager/helix.nix
     ../../modules/home-manager/antigravity-cli.nix
     ../../modules/home-manager/niri.nix
+    ../../modules/home-manager/yazi.nix
   ];
 
   home.packages = with pkgs; [
