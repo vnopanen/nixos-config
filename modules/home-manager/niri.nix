@@ -4,12 +4,6 @@
   ...
 }:
 {
-  fonts.fontconfig.enable = true;
-
-  home.packages = with pkgs; [
-    nerd-fonts.symbols-only
-  ];
-
   programs.niri = {
     settings = {
       prefer-no-csd = true;
@@ -270,7 +264,7 @@
       * {
         border: none;
         border-radius: 0;
-        font-family: "Noto Sans", "Liberation Sans", sans-serif;
+        font-family: "JetBrainsMono Nerd Font", sans-serif;
         font-size: 13px;
         min-height: 0;
       }

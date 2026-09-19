@@ -36,6 +36,11 @@
     package = pkgs.niri;
   };
 
+  fonts.fontconfig.enable = true;
+  fonts.packages = with pkgs; [
+    nerd-fonts.jetbrains-mono
+  ];
+
   nix = {
     distributedBuilds = true;
     buildMachines = [
