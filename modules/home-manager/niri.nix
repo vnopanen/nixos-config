@@ -1,9 +1,12 @@
 {
   config,
   pkgs,
+  inputs,
   ...
 }:
 {
+  imports = [ inputs.noctalia.homeModules.default ];
+
   programs.niri = {
     settings = {
       prefer-no-csd = true;
@@ -18,16 +21,12 @@
         focus-ring.enable = true;
       };
 
-      spawn-at-startup = [
-        { argv = [ "${pkgs.waybar}/bin/waybar" ]; }
-      ];
-
       binds = with config.lib.niri.actions; {
         # Core & Applications
         "Mod+Shift+E".action = quit;
         "Mod+T".action = spawn "${pkgs.alacritty}/bin/alacritty";
         "Mod+Q".action = close-window;
-        "Mod+Space".action = spawn "${pkgs.fuzzel}/bin/fuzzel";
+        "Mod+Space".action = spawn-sh "noctalia msg panel-toggle launcher";
         "Mod+O".action = toggle-overview;
         "Mod+F1".action = show-hotkey-overlay;
 
@@ -159,283 +158,9 @@
     enable = true;
   };
 
-  programs.fuzzel = {
+  programs.noctalia = {
     enable = true;
-    settings = {
-      main = {
-        terminal = "${pkgs.alacritty}/bin/alacritty";
-        layer = "overlay";
-        font = "JetBrainsMono Nerd Font:size=13";
-        width = 40;
-        lines = 10;
-        horizontal-pad = 20;
-        vertical-pad = 15;
-        inner-pad = 10;
-      };
-
-      colors = {
-        background = "1a1b26ff"; # Dark Tokyo Night background
-        text = "c0caf5ff"; # Bright foreground text
-        match = "7aa2f7ff"; # Highlighted/matched characters
-        selection = "283457ff"; # Selected item background
-        selection-text = "c0caf5ff"; # Selected item text
-        border = "7aa2f7ff"; # Border accent color
-      };
-
-      border = {
-        width = 2;
-        radius = 8;
-      };
-    };
-  };
-
-  programs.waybar = {
-    enable = true;
-    systemd.enable = false;
-    settings = {
-      mainBar = {
-        layer = "top";
-        position = "top";
-        height = 30;
-        spacing = 4;
-        modules-left = [
-          "niri/workspaces"
-          "niri/window"
-        ];
-        modules-center = [ "clock" ];
-        modules-right = [
-          "pulseaudio"
-          "network"
-          "cpu"
-          "memory"
-          "battery"
-          "tray"
-        ];
-
-        "niri/workspaces" = {
-          format = "{index}";
-        };
-
-        "niri/window" = {
-          format = "{title}";
-          max-length = 45;
-          separate-outputs = true;
-        };
-
-        clock = {
-          format = "{:%H:%M  %a, %d %b}";
-          tooltip-format = "<tt><small>{calendar}</small></tt>";
-        };
-
-        battery = {
-          states = {
-            warning = 30;
-            critical = 15;
-          };
-          format = "{icon} {capacity}%";
-          format-charging = "⚡ {capacity}%";
-          format-plugged = " {capacity}%";
-          format-icons = [
-            ""
-            ""
-            ""
-            ""
-            ""
-          ];
-        };
-
-        network = {
-          format-wifi = " {essid}";
-          format-ethernet = "󰈀 {ipaddr}";
-          format-disconnected = "󰤭 Disconnected";
-          tooltip-format = "{ifname} via {gwaddr}";
-        };
-
-        pulseaudio = {
-          format = "{icon} {volume}%";
-          format-muted = "󰝟 muted";
-          format-icons = {
-            default = [
-              "󰕿"
-              "󰖀"
-              "󰕾"
-            ];
-          };
-          on-click = "${pkgs.wireplumber}/bin/wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle";
-        };
-
-        cpu = {
-          format = " {usage}%";
-          tooltip = true;
-        };
-
-        memory = {
-          format = " {}%";
-          tooltip-format = "RAM: {used:0.1f}G / {total:0.1f}G";
-        };
-
-        tray = {
-          spacing = 10;
-        };
-      };
-    };
-
-    style = ''
-      * {
-        border: none;
-        border-radius: 0;
-        font-family: "JetBrainsMono Nerd Font", sans-serif;
-        font-size: 13px;
-        min-height: 0;
-      }
-
-      window#waybar {
-        background-color: rgba(20, 21, 29, 0.88);
-        color: #c0caf5;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-      }
-
-      #workspaces {
-        background-color: transparent;
-        padding: 0;
-        margin: 3px 4px;
-      }
-
-      #workspaces button {
-        padding: 2px 9px;
-        margin: 0 2px;
-        border-radius: 6px;
-        background-color: rgba(255, 255, 255, 0.06);
-        color: #7aa2f7;
-        font-weight: 500;
-        transition: all 0.2s ease;
-      }
-
-      #workspaces button:hover {
-        background-color: rgba(255, 255, 255, 0.14);
-        color: #c0caf5;
-      }
-
-      #workspaces button.focused,
-      #workspaces button.active {
-        background-color: #7aa2f7;
-        color: #1a1b26;
-        font-weight: 700;
-      }
-
-      #workspaces button.urgent {
-        background-color: #f7768e;
-        color: #1a1b26;
-      }
-
-      #window {
-        margin: 3px 8px;
-        padding: 2px 6px;
-        color: #a9b1d6;
-        font-weight: 500;
-      }
-
-      #clock,
-      #battery,
-      #cpu,
-      #memory,
-      #network,
-      #pulseaudio,
-      #tray {
-        padding: 2px 10px;
-        margin: 3px 3px;
-        border-radius: 8px;
-        background-color: rgba(255, 255, 255, 0.06);
-        color: #c0caf5;
-        transition: background-color 0.2s ease, color 0.2s ease;
-      }
-
-      #clock {
-        background-color: rgba(122, 162, 247, 0.12);
-        color: #7aa2f7;
-        font-weight: 600;
-        padding: 2px 14px;
-      }
-
-      #pulseaudio {
-        color: #7dcfff;
-      }
-
-      #pulseaudio.muted {
-        background-color: rgba(247, 118, 142, 0.15);
-        color: #f7768e;
-      }
-
-      #network {
-        color: #9ece6a;
-      }
-
-      #network.disconnected {
-        background-color: rgba(247, 118, 142, 0.15);
-        color: #f7768e;
-      }
-
-      #cpu {
-        color: #e0af68;
-      }
-
-      #memory {
-        color: #bb9af7;
-      }
-
-      #battery {
-        color: #73daca;
-      }
-
-      #battery.charging,
-      #battery.plugged {
-        color: #9ece6a;
-      }
-
-      #battery.warning:not(.charging) {
-        background-color: rgba(224, 175, 104, 0.2);
-        color: #e0af68;
-      }
-
-      #battery.critical:not(.charging) {
-        background-color: rgba(247, 118, 142, 0.25);
-        color: #f7768e;
-        animation-name: blink;
-        animation-duration: 0.8s;
-        animation-timing-function: linear;
-        animation-iteration-count: infinite;
-        animation-direction: alternate;
-      }
-
-      @keyframes blink {
-        to {
-          background-color: rgba(247, 118, 142, 0.05);
-          color: #f7768e;
-        }
-      }
-
-      #tray {
-        padding: 2px 8px;
-      }
-
-      #tray > .passive {
-        -gtk-icon-effect: dim;
-      }
-
-      #tray > .needs-attention {
-        -gtk-icon-effect: highlight;
-      }
-
-      tooltip {
-        background: #1a1b26;
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        border-radius: 8px;
-      }
-
-      tooltip label {
-        color: #c0caf5;
-        padding: 4px;
-      }
-    '';
+    systemd.enable = true;
+    package = pkgs.noctalia;
   };
 }
