@@ -49,6 +49,6 @@
 
   home.file.".screenrc".text = ''
     defscrollback 5000
-    termcapinfo xterm* ti@:te@
+    termcapinfo xterm*|alacritty*|rxvt* ti@:te@
   '';
 }
