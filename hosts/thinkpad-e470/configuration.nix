@@ -191,6 +191,10 @@
 
   environment.localBinInPath = true;
 
+  environment.systemPackages = with pkgs; [
+    podman-compose
+  ];
+
   virtualisation.podman.enable = true;
 
   home-manager = {
