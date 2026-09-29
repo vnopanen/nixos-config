@@ -85,6 +85,22 @@
         "type": "github"
       }
     },
+    "dotfiles": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1790691224,
+        "narHash": "sha256-a5/54qxqwdnXkbbthhzVZtqGc1ynEY4SuH71+RR8TOA=",
+        "owner": "vnopanen",
+        "repo": "dotfiles",
+        "rev": "32f580b0e9331da18c531869bf56c7766ba6eefa",
+        "type": "github"
+      },
+      "original": {
+        "owner": "vnopanen",
+        "repo": "dotfiles",
+        "type": "github"
+      }
+    },
     "flake-compat": {
       "locked": {
         "lastModified": 1767039857,
@@ -389,6 +405,7 @@
       "inputs": {
         "agenix": "agenix",
         "cosmic-manager": "cosmic-manager",
+        "dotfiles": "dotfiles",
         "home-manager": "home-manager_2",
         "niri": "niri",
         "nixos-hardware": "nixos-hardware",

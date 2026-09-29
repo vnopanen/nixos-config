@@ -1,5 +1,6 @@
 {
   pkgs,
+  lib,
   inputs,
   ...
 }:
@@ -9,7 +10,21 @@
     tree
     nano
     ripgrep
+    chezmoi
+    starship
+    rsync
+    fd
   ];
+
+  home.activation.applyChezmoi = lib.hm.dag.entryAfter [ "linkGeneration" ] ''
+    if [[ -d "$HOME/.local/share/chezmoi" ]]; then
+      verboseEcho "Applying local chezmoi dotfiles"
+      run ${pkgs.chezmoi}/bin/chezmoi --force apply
+    else
+      verboseEcho "Applying pinned flake dotfiles"
+      run ${pkgs.chezmoi}/bin/chezmoi --source "${inputs.dotfiles}" --force apply
+    fi
+  '';
 
   programs.fzf = {
     enable = true;
@@ -23,17 +38,15 @@
 
   programs.bash = {
     enable = true;
-    shellAliases = {
-      g = "git status";
-      ".." = "cd ..";
-      "..." = "cd ../..";
-      "...." = "cd ../../..";
-    };
-  };
+    initExtra = ''
+      if [ -f "$HOME/.bash_aliases" ]; then
+        . "$HOME/.bash_aliases"
+      fi
 
-  programs.starship = {
-    enable = true;
-    settings = pkgs.lib.importTOML (inputs.self + /starship.toml);
+      if [[ "$TERM" != "dumb" ]]; then
+        eval "$(${pkgs.starship}/bin/starship init bash)"
+      fi
+    '';
   };
 
   programs.home-manager.enable = true;

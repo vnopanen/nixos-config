@@ -8,7 +8,6 @@
   imports = [
     ../../modules/home-manager/common.nix
     ../../modules/home-manager/cosmic.nix
-    ../../modules/home-manager/helix.nix
     ../../modules/home-manager/antigravity-cli.nix
     ../../modules/home-manager/niri.nix
     ../../modules/home-manager/yazi.nix
@@ -25,6 +24,13 @@
     openssl
     uv
     just
+    helix
+    nixfmt
+    ruff
+    pyright
+    wl-clipboard
+    picocom
+    xdg-utils
   ];
 
   programs.brave = {
@@ -38,7 +44,6 @@
     update-boot = "sudo nixos-rebuild boot --flake ~/nixos-config#thinkpad-e470";
     update-switch = "sudo nixos-rebuild switch --flake ~/nixos-config#thinkpad-e470";
     update-dry = "sudo nixos-rebuild dry-run --flake ~/nixos-config#thinkpad-e470";
-    lg = "lazygit";
     kasa-plug = "kasa --credentials-hash $(cat ${osConfig.age.secrets.kasa_hash.path}) --encrypt-type KLAP --host $(cat ${osConfig.age.secrets.kasa_host.path})";
   };
 
