@@ -47,6 +47,18 @@
     kasa-plug = "kasa --credentials-hash $(cat ${osConfig.age.secrets.kasa_hash.path}) --encrypt-type KLAP --host $(cat ${osConfig.age.secrets.kasa_host.path})";
   };
 
+  programs.foot = {
+    enable = true;
+    settings = {
+      main.font = "JetBrainsMono NFM Light:size=11";
+      colors-dark = {
+        background = "1a1b26"; # Dark blue
+        foreground = "c0caf5";
+        alpha = "0.95";
+      };
+    };
+  };
+
   home.file.".screenrc".text = ''
     defscrollback 5000
     termcapinfo xterm*|alacritty*|rxvt* ti@:te@

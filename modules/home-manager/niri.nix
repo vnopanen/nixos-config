@@ -24,7 +24,7 @@
       binds = with config.lib.niri.actions; {
         # Core & Applications
         "Mod+Shift+E".action = quit;
-        "Mod+T".action = spawn "${pkgs.alacritty}/bin/alacritty";
+        "Mod+T".action = spawn "${pkgs.foot}/bin/foot";
         "Mod+Q".action = close-window;
         "Mod+Space".action = spawn-sh "noctalia msg panel-toggle launcher";
         "Mod+O".action = toggle-overview;
@@ -152,10 +152,6 @@
         };
       };
     };
-  };
-
-  programs.alacritty = {
-    enable = true;
   };
 
   programs.noctalia = {
