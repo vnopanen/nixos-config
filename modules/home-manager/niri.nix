@@ -132,6 +132,19 @@
   programs.noctalia = {
     enable = true;
     systemd.enable = true;
-    package = pkgs.noctalia;
+    package = inputs.nixpkgs-unstable.legacyPackages.x86_64-linux.noctalia;
+    settings = {
+      shell.animation = {
+        enabled = true;
+        speed = 1.0;
+      };
+      lockscreen = {
+        transition = [
+          "zoom"
+        ];
+        transition_duration = 500;
+        edge_smoothness = 0.3;
+      };
+    };
   };
 }
