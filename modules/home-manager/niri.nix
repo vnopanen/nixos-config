@@ -134,9 +134,9 @@
     systemd.enable = true;
     package = inputs.nixpkgs-unstable.legacyPackages.x86_64-linux.noctalia;
     settings = {
-      shell.animation = {
-        enabled = true;
-        speed = 1.0;
+      shell = {
+        animation.enabled = true;
+        launch_apps_as_systemd_services = true;
       };
       lockscreen = {
         transition = [
