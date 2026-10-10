@@ -165,7 +165,7 @@
     text = ''
       #!/usr/bin/env bash
       export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/ssh-agent"
-      exec "$@"
+      exec "$@" 2> >(grep -v "Calling import-environment without a list of variable names is deprecated" >&2)
     '';
     mode = "0755";
   };
