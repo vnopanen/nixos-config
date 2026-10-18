@@ -31,7 +31,7 @@
     picocom
     xdg-utils
     yazi
-    awscli2
+    rclone
   ];
 
   programs.brave = {
