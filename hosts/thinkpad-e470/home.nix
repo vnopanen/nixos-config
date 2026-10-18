@@ -31,6 +31,7 @@
     picocom
     xdg-utils
     yazi
+    awscli2
   ];
 
   programs.brave = {
