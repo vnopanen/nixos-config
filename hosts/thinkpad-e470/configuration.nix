@@ -31,6 +31,8 @@
     };
   };
 
+  programs.nix-ld.enable = true;
+
   programs.niri = {
     enable = true;
     package = pkgs.niri;
